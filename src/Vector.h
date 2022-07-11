@@ -17,12 +17,12 @@ struct Vector
 };
 
 // Externa funktioner:
-struct Vector new_Vector(void);						// Initieringsrutin för dynamiska arrayer, returnerar färdig vektor.
-void Vector_resize(struct Vector* self, const size_t new_size);
-void Vector_push(struct Vector* self, const uint32_t new_element);	// Lägger till ett nytt element längst bak i arrayen.
-void Vector_clear(struct Vector* self);					// Tömmer arrayen och frigör minne.
-void Vector_set(struct Vector* self, const size_t index, const uint32_t new_element);
-uint32_t Vector_sum(const struct Vector* self);				// Beräknar summan av alla befintliga element.
-double Vector_average(const struct Vector* self);			// Beräknar genomsnitt av lagrade värden.
-void Vector_print(const struct Vector* self);				// Skriver ut vektorns innehåll.
+struct Vector new_Vector(void);								// Initieringsrutin för dynamiska arrayer, returnerar färdig vektor.
+void Vector_resize(struct Vector* self, const size_t new_size);				// Uppdaterar den dynamiska vektorns storlek.
+void Vector_push(struct Vector* self, const uint32_t new_element);			// Lägger till ett nytt element längst bak i arrayen.
+void Vector_clear(struct Vector* self);							// Tömmer arrayen och frigör minne.
+void Vector_set(struct Vector* self, const size_t index, const uint32_t new_element);	// Används för att skriva över ett gammalt element.
+uint32_t Vector_sum(const struct Vector* self);						// Beräknar summan av alla befintliga element.
+double Vector_average(const struct Vector* self);					// Beräknar genomsnitt av lagrade värden.
+void Vector_print(const struct Vector* self);						// Skriver ut vektorns innehåll.
 #endif /* VECTOR_H_ */
