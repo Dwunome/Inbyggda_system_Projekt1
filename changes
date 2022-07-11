@@ -1,0 +1,11 @@
+Korrigeringar av kod
+
+Generella förändringar:
+
+* Kompilatorns toolchain byttes från -std=gnu89 till -std=gnu99, för att möjliggöra kompilering med C99.
+* unsigned char har bytts ut mot uint8_t. long byttes till int32_t. unsigned long byttes till uint32_t.
+* Kommentarsblock har uppdaterats för att överensstämma med C99. Enkelradiga kommentarer har bytts från "/**/" till "//".
+* Onödiga pekare har tagits bort.
+* Bitmakron har tagits bort och har ersatts mot "ren" bitvis skfitning, för förtydligande.
+* Typdefinitioner har använts för enumerationer. Dock ej för struktarna, då jag tycker att det gör koden mer tydlig.
+
