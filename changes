@@ -9,3 +9,102 @@ Generella förändringar:
 * Bitmakron har tagits bort och har ersatts mot "ren" bitvis skfitning, för förtydligande.
 * Typdefinitioner har använts för enumerationer. Dock ej för struktarna, då jag tycker att det gör koden mer tydlig.
 
+
+Filen ADC.c
+* Ändrade alla (*self) till -> operatorn eller punkt.
+* Bytte ut bit-makron i ADC_read.
+* Skapade funktionen init_ADC.
+* Skapade ett nytt objekt self i funktionen new_TempSensor samt lade till funktionsanrop init_ADC.
+
+* Funktionen print_temperature: Tog bort float Uin. Resultatet från ADC_read lagras i konstanten ADC_result. 
+* Bytt namn på Uin till input_voltage, gjort till const double. Skapat const temperature för lagring av beräknad temperatur som sedan avrundas 
+* till närmsta heltal och lagras i konstanten rounded_temperature.
+
+Filen ADC.h
+* Bytte ut bit-makron mot rena bitvis skiftningar.
+* Unionen temperature togs bort.
+* I strukten TempSensor togs unsigned short ADC_result & union Temperature temperature bort.
+* Funktionsdeklarationen ADC_read flyttades till ADC.c
+
+Filen Button.c
+* Ändrade alla (*self) till -> operatorn eller punkt.
+* Funktionen new_Button: Skapade ett objekt av strukten Button döpt self. Korrigerade PIN-nummer för PORTB, self.PIN = PIN – 8
+* samt tog bort (*self).PIN = *PIN; då detta inte tar hänsyn till PINs på PORTB.
+* Funktionen Button_is_pressed: Bytt ut bitmakron. 
+* Funktionen Button_enable_interrupt: Aktiverade globala avbrott. Bytt ut bitmakron. Användning av union Byte togs bort.
+* Funktionen Button_disable_interrupt: Bytt ut bitmakron. Användning av union Byte togs bort.
+
+Filen DynamicTimer.c
+
+Filen DynamicTimer.h
+
+Filen GPIO.h
+* Generella förändringar.
+
+Filen Led.c
+* Ändrade alla (*self) till -> operatorn eller punkt.
+* Generella förändringar. 
+* Skapade funktionerna static void delay(const uint16_t delay_time),  void Led_blink(struct Led* self, const uint16_t delay_time).
+* Funktionen new_Led: Skapade ett objekt av strukten Led döpt self. 
+* Likt Button.c togs (*self).PIN = *PIN; bort och self.PIN = PIN – 8; lades till för PORTB.
+* Bytt ut bitmakron.
+
+Filen Serial.c
+* Lade till funktionsdeklaration av den statiska funktionen write_byte.
+* Bytt ut bitmakron
+* Funktionen init_serial: För att den första utskriften som transmitteras ska hamna längst till vänster på den 
+* första raden så transmitteras ett vagnreturstecken via write_byte('\r');. Där efter transmitteras 
+* ett nolltecken via write_byte('\0'); för att indikera att transmissionen är slutförd.
+
+* Funktionen serial_print: Bytte ut loop och goto loop mot en for-sats.
+* Funktionen serial_print_integer: Strängen text initieras till tom vid start via text[0] = '\0'. I 
+* sprintf bytte ”s” och ”text” plats och vid serial_print byttes ”s” ut mot ”text”.
+* Funktionen serial_print_unsigned: Samma ändringar som i serial_print_integer.
+
+Filen Serial.h
+* Funktionsdeklarationen void write_byte har flyttats till Serial.c
+* Sänkt baudrate från 115 220 Kbps till 9600 Kbps.
+* Bytt ut bitmakron.
+* Ändrat SIZE till 50. 
+* Vid ENABLE_SERIAL_TRANSMISSION ändrades ettställningen från (1 << TXCIE0) till (1 << TXEN0).
+
+Filen Timer.c
+* Ändrade alla (*self) till -> operatorn eller punkt.
+* Bytt ut bitmakron
+* Lade till funktionsdeklarationer init_timer() och get_required_interrupts().
+
+Filen Timer.h
+
+Filen Vector.c
+
+Filen Vector.h
+
+Filen definitions.h
+* Tog bort bitmakron.
+* Typdefinierade enumerationer.
+* Korrigerade klockfrekvensen från 160MHz till 16MHz då detta är mikrodatorn Atmega328p's korrekta frekvens.
+* Inkludering av biblioteket util/delay.h
+
+Filen header.h
+* Inkluderade egna headerfiler Vector.h, DynamicTimer.h
+* Generella förändringar.
+
+Filen interrupts.c
+* Timer1 används av DynamicTimer.
+* & operatorn har lagts till framför varje ingående argument i funktionsanropen. (&Adress till ingående argument istället för kopia).
+
+Filen main.c
+* Bytte goto loop mot en while-sats.
+
+Filen setup.c
+* Lade till egna statiska funktioner för initiering av timers, GPIO, tempsensor. 
+* Timer 1 har ändrats från 500 till 60 000 motsvarande 60 sekunder.
+* Tagit bort 8 st rader:
+* unsigned char led1_PIN = 9;
+* unsigned char button_PIN = 13;
+* unsigned char temp_PIN = 1;
+* enum TimerSelection timer0_selection = TIMER0;
+* enum TimerSelection timer1_selection = TIMER1;
+* float timer0_delay = 300;
+* float timer1_delay = 500;
+* Ändrade tilldelningarna av PINS, timers, delays ovan till motsvarande tilldelning, se exempel: button = new_Button(13); 
