@@ -17,7 +17,19 @@ Filen DynamicTimer.c,
 Filen DynamicTimer.h
 
 Dessa filer har implementerats för att vid genomsninttstiden mellan varje knapptryckning skall avgöra hur ofta 
-temperaturmätningarna skall ske, via lagring i en dynamisk behållare som i detta fall håller upp till 10 värden.
+temperaturmätningarna skall ske, via lagring i en dynamisk behållare.
+
+# Resultat
+* Programmet fungerar nu som det är tänkt, vid start skrivs meddelandet ”Dynamic temperature
+* measurement system”, sedan händer inget förens tryckknappen på PIN 13 trycks ned, se Figur 1. Vid
+* första knapptryck kommer ett meddelande som berättar att den dynamiska timern är initierad samt
+* att en första avläsning av rumstemperaturen gör, vilket också skrivs ut, se Figur 2.
+* Vid nästkommande knapptryckningar skrivs kapacitet och antal element ut, se Figur 3.
+
+* Vid uppstart av programmet så skrivs meddelandet "Dynamic temperature measurement system". Därefter sker ingenting förrän tryckknapp på PIN13 trycks ned.
+* Vid första knapptryck skrivs ett meddelande ut som berättar att den dynamiska timern är initierad samt att en temperaturavläsning utförs och skrivs ut.
+* Vid nästkommande knapptryckningar skrivs kapacitet, antal element och fördröjningstid mellan temperatur-utskrifterna ut. Därefter sker utskrift av
+* temperatur beräknat på genomsnittet av tiden då knappen har tryckts ned.
 
 
 
