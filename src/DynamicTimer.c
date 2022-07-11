@@ -3,66 +3,65 @@
 static inline size_t check_capacity(const size_t capacity);
 
 /*
-* Funktionen anv‰nds fˆr att implementera en ny dynamisk timer.
-* IngÂende argument timerSelection utgˆrs av vald timerkrets och
-* capacity utgˆr maxstorleken pÂ arrayen som lagrar antalet exekverade 
+* Funktionen anv√§nds f√∂r att implementera en ny dynamisk timer.
+* Ing√•ende argument timerSelection utg√∂rs av vald timerkrets och
+* capacity utg√∂r maxstorleken p√• arrayen som lagrar antalet exekverade 
 * avbrott mellan varje knapptryckning.
 */
 struct DynamicTimer new_DynamicTimer(const TimerSelection timerSelection, const size_t capacity)
 {
-	struct DynamicTimer self;
-	self.timer = new_Timer(timerSelection, 0x00); // Initierar timern, av vid start.
-	self.interrupt_vector = new_Vector(); // Initierar tom dynamisk array.
-	self.interrupt_counter = 0x00; // R‰knaren startar pÂ noll.
-	self.capacity = check_capacity(capacity); // sparar kontrollerad kapacitet
-	self.next = 0x00; // N‰sta element ‰r fˆrsta element vid start, sÂ index noll.
-	self.initiated = false; // Timern har ej startat fˆrr‰n vi trycker pÂ knappen.
-	return self; // Returnerar det f‰rdiga objektet.
+	struct DynamicTimer self;				// Skapar objektet self av strukten DynamicTimer.
+	self.timer = new_Timer(timerSelection, 0x00);		// Initierar timern, av vid start.
+	self.interrupt_vector = new_Vector();			// Initierar tom dynamisk array.
+	self.interrupt_counter = 0x00;				// Avbrottsr√§knaren startar p√• noll.
+	self.capacity = check_capacity(capacity);		// Sparar kontrollerad kapacitet.
+	self.next = 0x00;					// N√§sta element √§r f√∂rsta element vid start, p√• index noll.
+	self.initiated = false;					// Timerns startv√§rde √§r false (av). Har ej startat f√∂rr√§n vi trycker p√• knappen.
+	return self;						// Returnerar det f√§rdiga objektet.
 }
 
-/*
-* check_capacity anv‰nds fˆr att kontrollera angiven kapacitet
-* g‰llande antalet element som ska lagras av en dynamisk tiemr, sÂ
-* att denna kapacitet inte ˆverstiger maximalt tillÂtna storlek.
-* Det ingÂende argumentet capacity utgˆrs av angiven kapacitet. 
-* Om angiven kapacitet ˆverstiger hˆgsta tillÂtna storlek sÂ returneras
-* maxkapaciteten sÂ att timerns kapacitet s‰tts till hˆgsta tillÂtna.
+/************************************************************************
+* check_capacity anv√§nds f√∂r att kontrollera angiven kapacitet
+* g√§llande antalet element som ska lagras av en dynamisk timer, 
+* s√• att denna kapacitet ej √∂verstiger maximalt till√•tna storlek.
+* Det ing√•ende argumentet capacity utg√∂rs av angiven kapacitet. 
+* Om angiven kapacitet √∂verstiger h√∂gsta till√•tna storlek s√• returneras
+* maxkapaciteten s√• att timerns kapacitet s√§tts till h√∂gsta till√•tna.
 * Annars returneras angiven kapacitet.
-*/
+************************************************************************/
 static inline size_t check_capacity(const size_t capacity)
 {
-	// Om kapaciteten ‰r ˆver MAX_CAPACITY, sÂ returneras MAX_CAPACITY:
-	if (capacity > MAX_CAPACITY) return MAX_CAPACITY; 
-	return capacity; // Annars returneras angivet v‰rde
+	if (capacity > MAX_CAPACITY) return MAX_CAPACITY;		// Om kapaciteten √§r √∂ver MAX_CAPACITY, s√• returneras MAX_CAPACITY.
+	return capacity;						// Annars returneras angivet v√§rde.
 }
 
-/*
-* DynamicTimer_on ‰r en wrapper fˆr funktionen Timer_on och anv‰nds
-* fˆr att s‰tta pÂ en timer. I detta fall s‰tts den dynamiska 
-* timerkretsen pÂ. 
-*/
+/************************************************************************
+* DynamicTimer_on √§r en wrapper f√∂r funktionen Timer_on och anv√§nds
+* f√∂r att s√§tta p√• en timer. I detta fall s√§tts den dynamiska 
+* timerkretsen p√•. 
+************************************************************************/
 void DynamicTimer_on(struct DynamicTimer* self)
 {
 	Timer_on(&self->timer); 
 	return;
 }
-// Wrapper fˆr att st‰nga av timerkretsen:
-void DynamicTimer_off(struct DynamicTimer* self)
+
+void DynamicTimer_off(struct DynamicTimer* self)		// Wrapper f√∂r att st√§nga av timerkretsen.
 {
 	Timer_off(&self->timer); 
 	return;
 }
-// Wrapper fˆr att toggla timerkretsen:
-void DynamicTimer_toggle(struct DynamicTimer* self)
+
+void DynamicTimer_toggle(struct DynamicTimer* self)		// Wrapper f√∂r att toggla timerkretsen.
 {
 	Timer_toggle(&self->timer); 
 }
 
-/*
-* DynamicTimer_count anv‰nds fˆr att r‰kna antalet exekverade avbrott.
-* Om timern ‰r pÂ sÂ r‰knas antalet exekverade avbrott samt antalet
-* passerade avbrott sedan fˆregÂende knapptryckning.
-*/ 
+/************************************************************************
+* DynamicTimer_count anv√§nds f√∂r att r√§kna antalet exekverade avbrott.
+* Om timern √§r p√• s√• r√§knas antalet exekverade avbrott samt antalet
+* passerade avbrott sedan f√∂reg√•ende knapptryckning.
+************************************************************************/ 
 void DynamicTimer_count(struct DynamicTimer* self)
 {
 	if (self->timer.enabled)
@@ -72,122 +71,124 @@ void DynamicTimer_count(struct DynamicTimer* self)
 	}
 }
 
-/*
-* Indikerar ifall timern har lˆpt ut. 
-* Om timern inte ‰r igÂng sÂ returneras false, 
-* annars kontrolleras ifall timern har lˆpt ut.
-*/
+/************************************************************************
+* Indikerar ifall timern har l√∂pt ut. 
+* Om timern inte √§r ig√•ng s√• returneras false, 
+* annars kontrolleras ifall timern har l√∂pt ut.
+************************************************************************/
 bool DynamicTimer_elapsed(struct DynamicTimer* self)
  {
 	if (!self->timer.required_interrupts) return false; 
 	return Timer_elapsed(&self->timer); 
  }
  
- /*
- * _clear anv‰nds fˆr att nollst‰lla vektorn genom att frigˆra 
- * allokerat minne. 
- */ 
+ /************************************************************************
+ * DynamicTimer_clear anv√§nds f√∂r att nollst√§lla vektorn genom att
+ * frig√∂ra allokerat minne. 
+ ************************************************************************/ 
 void DynamicTimer_clear(struct DynamicTimer* self)
 {
-	Timer_reset(&self->timer); // Nollst‰ller timern
-	Vector_clear(&self->interrupt_vector); // Nollst‰ller vektorn
-	self->interrupt_counter = 0x00; // Nollst‰ller avbrottsr‰knaren
-	self->next = 0x00; // n‰sta element vid start blir dÂ noll
-	self->initiated = false; // ej initierad
+	Timer_reset(&self->timer);			// Nollst√§ller timern.
+	Vector_clear(&self->interrupt_vector);		// Nollst√§ller vektorn.
+	self->interrupt_counter = 0x00;			// Nollst√§ller avbrottsr√§knaren.
+	self->next = 0x00;				// N√§sta element vid start nollst√§lls.
+	self->initiated = false;			// Dynamiska timern √§r ej initierad.
 	return;
 }
 
-/*
-* _update anv‰nds fˆr att uppdatera tiden pÂ en dynamisk timer.
-*/
+/************************************************************************
+* DynamicTimer_update anv√§nds f√∂r att uppdatera tiden p√• en dynamisk timer.
+************************************************************************/
 void DynamicTimer_update(struct DynamicTimer* self)
 {
-	// Om timern ej ‰r startad ‰n sÂ startar den och blir nollst‰lld:
-	if (!self->initiated)
+	
+	if (!self->initiated)					// Om timern ej √§r startad, s√• nollst√§lls samt startas den.
 	{
-		self->interrupt_counter = 0x00; // R‰kningen bˆrjar frÂn och med nu.
-		self->initiated = true; // Indikerar att timern nu ‰r igÂng pÂ riktigt.
+		self->interrupt_counter = 0x00;			// Nollst√§ller r√§knaren.
+		self->initiated = true;				// Indikerar att timern √§r ig√•ng.
 		serial_print("Dynamic timer initiated!\n");
 		return;
 	}
-	// Om vektorn inte ‰r full, l‰gg till det nya elementet l‰ngst bak (push):
-	if (self->interrupt_vector.elements < self->capacity)
+	
+	if (self->interrupt_vector.elements < self->capacity)	// Om vektorn inte √§r full, l√§gg till det nya elementet l√§ngst bak (push).
+	{
 		Vector_push(&self->interrupt_vector, self->interrupt_counter);
-	else // Annars skrivs det ‰ldsta elementet ˆver:	
-		 Vector_set(&self->interrupt_vector, self->next, self->interrupt_counter);	
-	self->interrupt_counter = 0x00; // Nollst‰ller infˆr n‰sta uppr‰kning.
+	}
+	else							// Annars skrivs det √§ldsta elementet √∂ver:	
+	{
+		Vector_set(&self->interrupt_vector, self->next, self->interrupt_counter);	
+		self->interrupt_counter = 0x00;			// Nollst√§ller inf√∂r n√§sta uppr√§kning.
+	}
 	
-	// Inkrementera next, kolla dess v‰rde. Om nytt index hamnar utanfˆr array, bˆrja om frÂn noll:
-	if (++self->next > self->capacity) self->next = 0x00;
 	
-	// Ber‰knar genomsnittligt antal interrupt mellan knapptryckningar, avrundas till n‰rmsta heltal:
+	if (++self->next > self->capacity) // Inkrementerar next, om dess v√§rde √§r st√∂rre √§n kapacieteten (Om nytt index hamnar utanf√∂r array), b√∂rja om fr√•n noll:
+	{
+		self->next = 0x00;	
+	}
+	
+	
+	// Ber√§knar genomsnittligt antal interrupt mellan knapptryckningar, avrundas till n√§rmsta heltal:
 	const uint32_t average_interrupts = ((uint32_t)Vector_average(&self->interrupt_vector) + 0.5);
 	self->timer.required_interrupts = average_interrupts;
 	
 	serial_print("Dynamic timer updated!\n");
-	DynamicTimer_print(self); // Skriver ut all information.
+	DynamicTimer_print(self);				// Skriver ut all information.
 	
 	if (self->interrupt_vector.elements > 9)
 		DynamicTimer_set_capacity(self, 10);
 	return;
 }
 
-/*
-* _set_capacity anv‰nds fˆr att st‰lla in kapaciteten pÂ en dynamisk timer.
-* Det ingÂende argumentet new_capacity utgˆr angiven ny kapacitet, som
-* kontrolleras via ett anrop av funktionen check_capacity. Dess returv‰rde 
+/************************************************************************
+* _set_capacity anv√§nds f√∂r att st√§lla in kapaciteten p√• en dynamisk timer.
+* Det ing√•ende argumentet new_capacity utg√∂r angiven ny kapacitet, som
+* kontrolleras via ett anrop av funktionen check_capacity. Dess returv√§rde 
 * tilldelas till instansvariabeln capacity. Om den nya kapaciteten understiger
-* storleken pÂ den dynamiska timerns vektor, sÂ placeras de nyaste v‰rderna l‰ngst
-* fram i vektorn fˆljt av en omallokering till den nya storleken.
-*/
+* storleken p√• den dynamiska timerns vektor, s√• placeras de nyaste v√§rderna
+* l√§ngst fram i vektorn f√∂ljt av en omallokering till den nya storleken.
+************************************************************************/
 void DynamicTimer_set_capacity(struct DynamicTimer* self, const size_t new_capacity)
 {
-	// Om den nya kapaciteten ‰r noll, gˆr inget (avsluta):
-	if (!new_capacity) return; 
-	// Om den nya kapaciteten ‰r stˆrre ‰n aktuell kapacitet, uppdatera medlemmen capacity:
-	else if (new_capacity >= self->capacity)
+	
+	if (!new_capacity) return;			// Om den nya kapaciteten √§r noll, g√∂r inget (avsluta):
+	
+	else if (new_capacity >= self->capacity)	// Om den nya kapaciteten √§r st√∂rre √§n aktuell kapacitet, uppdatera medlemmen capacity:
 	{
 		self->capacity = new_capacity;
 		serial_print_unsigned("Vector capacity resized to %lu elements!\n", self->capacity);
 		return;
 	}
-	// Annars om den nya kapaciteten ‰r mindre ‰n tidigare, flytta de nyaste elementen l‰ngst fram i vecktorn och ‰ndra sedan storleken:
-	const size_t last = self->interrupt_vector.elements - 1; // Sista index i arrayen.
-	// Om next pekar pÂ index pÂ senare halvan av arrayen, sÂ flyttas elementet:
-	if (self->next >= self->interrupt_vector.elements / 2)
+	// Annars om den nya kapaciteten √§r mindre √§n tidigare, flytta de nyaste elementen l√§ngst fram i vektorn och √§ndra sedan storleken:
+	const size_t last = self->interrupt_vector.elements - 1; 	// Sista index i arrayen.
+	
+	if (self->next >= self->interrupt_vector.elements / 2)		// Om next pekar p√• index p√• senare halvan av arrayen, s√• flyttas elementet.
 	{
 		for (register size_t i = 0; i < self->interrupt_vector.elements / 2; i++)
 		self->interrupt_vector.data[i] = self->interrupt_vector.data[last - i];
 	}
-	// ƒndrar vektorns storlek till den nya kapaciteten:
-	Vector_resize(&self->interrupt_vector, new_capacity);
-	// Uppdaterar kapaciteten till den nya:
-	self->capacity = new_capacity;
+	
+	Vector_resize(&self->interrupt_vector, new_capacity);		// √Ñndrar vektorns storlek till den nya kapaciteten.
+	
+	self->capacity = new_capacity;					// Uppdaterar kapaciteten till den nya:
 	serial_print_unsigned("Vector capacity resized to %lu elements!\n", self->capacity);
 	
 	return;
 }
 
-/*
-* _print anv‰nds fˆr att skriva ut information om en dynamisk timer,
-* bland annat aktuell fˆrdrˆjningstid, antal lagrade element med ‰ven 
-* summan och genomsnittet av dessa.
-*/
+/************************************************************************
+* DynamicTimer_print anv√§nds f√∂r att skriva ut information om en dynamisk
+* timer, bland annat aktuell f√∂rdr√∂jningstid, antal lagrade element med 
+* √§ven summan och genomsnittet av dessa.
+************************************************************************/
 void DynamicTimer_print(const struct DynamicTimer* self)
 {
 	serial_print("----------------------------------------------------------------------------------------------------------\n");
-	// skriver ut kapaciteten:
-	serial_print_unsigned("Capacity: %lu\n", self->capacity); 
-	// Skriver ut antalet element i vektor:
-	serial_print_unsigned("Number of elements: %lu\n", self->interrupt_vector.elements);
-	// Skriver ut index fˆr n‰sta element:
-	serial_print_unsigned("Index of next element: %lu\n", self->next); 
-	// Skriver ut summan av alla element:
-	serial_print_unsigned("Sum of stored elements: %lu\n", Vector_sum(&self->interrupt_vector)); 
-	// Skriver ut genomsnittet av alla element. Avrundar till n‰rmsta heltal:
-	serial_print_unsigned("Average of stored elements: %lu\n", (uint32_t)(Vector_average(&self->interrupt_vector) + 0.5)); 
-	// Skriver ut fˆrdrˆjningstiden:
-	serial_print_unsigned("Delay time: %lu ms\n", self->timer.required_interrupts * INTERRUPT_TIME);
+	serial_print_unsigned("Capacity: %lu\n", self->capacity);						// skriver ut kapaciteten:
+	serial_print_unsigned("Number of elements: %lu\n", self->interrupt_vector.elements);			// Skriver ut antalet element i vektor:
+	serial_print_unsigned("Index of next element: %lu\n", self->next);					// Skriver ut index f√∂r n√§sta element:
+	serial_print_unsigned("Sum of stored elements: %lu\n", Vector_sum(&self->interrupt_vector));		// Skriver ut summan av alla element:
+	serial_print_unsigned("Average of stored elements: %lu\n", (uint32_t)(Vector_average(&self->interrupt_vector) + 0.5)); // Skriver ut genomsnittet av alla element. Avrundar till n√§rmsta heltal:
+	serial_print_unsigned("Delay time: %lu ms\n", self->timer.required_interrupts * INTERRUPT_TIME);	// Skriver ut f√∂rdr√∂jningstiden:
 	serial_print("---------------------------------------------------------------------------------------------------------\n\n");
 	return;
 }
