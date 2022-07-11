@@ -6,22 +6,22 @@
 #include "Vector.h"
 #include "Serial.h"
 
-#define MAX_CAPACITY 256 // Max antal element lagrad i dynamisk array.
+#define MAX_CAPACITY 256 			// Max antal element som kan lagras i dynamisk array.
 
-/*
-* Strukten DnamicTimer används för att implementera en dynamsisk timer
-* där antalet timergenerade avbrott räknas och implementeras för att 
-* skapa en genomsnittlig tid på timern.
-*/
+/************************************************************************
+* Strukten DnamicTimer anvÃ¤nds fÃ¶r att implementera en dynamsisk timer
+* dÃ¤r antalet timergenerade avbrott rÃ¤knas och implementeras fÃ¶r att 
+* skapa en genomsnittlig tid pÃ¥ timern.
+************************************************************************/
 struct DynamicTimer
 {
-	struct Timer timer; // Timerkrets, implementerar timerfunktionalitet.
-	struct Vector interrupt_vector; // Vektor, lagrar antalet interrupts mellan varje knapptryckning.
-	uint32_t interrupt_counter; // Räknar anatalet timergenererade avbrott mellan knapptryckningar.
-	size_t capacity; // Vektorns kapacitet.
-	size_t next; // Index för nästa element som skall läggas till. 
-	bool initiated; // indikerar ifall timer har blivit startad (Sker efeter första knapptryckningen).
-}; // Struktens namn.	
+	struct Timer timer;			// Timerkrets, implementerar timerfunktionalitet.
+	struct Vector interrupt_vector; 	// Vektor, lagrar antalet interrupts mellan varje knapptryckning.
+	uint32_t interrupt_counter;		// RÃ¤knar anatalet timergenererade avbrott mellan knapptryckningar.
+	size_t capacity;			// Vektorns kapacitet.
+	size_t next;				// Index fÃ¶r nÃ¤sta element som skall lÃ¤ggas till. 
+	bool initiated;				// indikerar ifall timer har blivit startad (Sker efter fÃ¶rsta knapptryckningen).
+};	
 
 // Externa funktioner:
 struct DynamicTimer new_DynamicTimer(const TimerSelection timerSelection, const size_t capacity);
