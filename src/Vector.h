@@ -5,24 +5,24 @@
 #include "definitions.h"
 #include "Serial.h"
 
-/*
-Strukten Vector används för att implementera dynamiska arrayer för lagring av
-osignerade heltal. Pekaren data pekar på ett dynamiskt fält som lagrar samtliga
+/******************************************************************************
+Strukten Vector anvÃ¤nds fÃ¶r att implementera dynamiska arrayer fÃ¶r lagring av
+osignerade heltal. Pekaren data pekar pÃ¥ ett dynamiskt fÃ¤lt som lagrar samtliga
 tal, medan elements indikerar antalet tal i arrayen. 
-*/
+******************************************************************************/
 struct Vector
 {
-	uint32_t* data;		// Pekare till dynamsikt fält som lagrar osignerade heltal
-	size_t elements;	// Räknar antalet element (osignerade heltal) i arrayen.
+	uint32_t* data;		// Pekare till dynamsikt fÃ¤lt som lagrar osignerade heltal
+	size_t elements;	// RÃ¤knar antalet element (osignerade heltal) i arrayen.
 };
 
 // Externa funktioner:
-struct Vector new_Vector(void); // Initieringsrutin för dynamiska arrayer, returnerar färdig vektor.
+struct Vector new_Vector(void);						// Initieringsrutin fÃ¶r dynamiska arrayer, returnerar fÃ¤rdig vektor.
 void Vector_resize(struct Vector* self, const size_t new_size);
-void Vector_push(struct Vector* self, const uint32_t new_element); // Lägger till ett nytt element längst bak i arrayen.
-void Vector_clear(struct Vector* self); // Tömmer arrayen och frigör minne.
+void Vector_push(struct Vector* self, const uint32_t new_element);	// LÃ¤gger till ett nytt element lÃ¤ngst bak i arrayen.
+void Vector_clear(struct Vector* self);					// TÃ¶mmer arrayen och frigÃ¶r minne.
 void Vector_set(struct Vector* self, const size_t index, const uint32_t new_element);
-uint32_t Vector_sum(const struct Vector* self); // Beräknar summan av alla befintliga element.
-double Vector_average(const struct Vector* self); // Beräknar genomsnitt av lagrade värden.
-void Vector_print(const struct Vector* self); // Skriver ut vektorns innehåll.
+uint32_t Vector_sum(const struct Vector* self);				// BerÃ¤knar summan av alla befintliga element.
+double Vector_average(const struct Vector* self);			// BerÃ¤knar genomsnitt av lagrade vÃ¤rden.
+void Vector_print(const struct Vector* self);				// Skriver ut vektorns innehÃ¥ll.
 #endif /* VECTOR_H_ */
