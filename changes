@@ -13,7 +13,7 @@ Generella förändringar:
 Filen ADC.c
 * Ändrade alla (*self) till -> operatorn eller punkt.
 * Bytte ut bit-makron i ADC_read.
-* Skapade funktionen init_ADC.
+* Skapade funktionen init_ADC för att initiera AD-omvandlaren.
 * Skapade ett nytt objekt self i funktionen new_TempSensor samt lade till funktionsanrop init_ADC.
 
 * Funktionen print_temperature: Tog bort float Uin. Resultatet från ADC_read lagras i konstanten ADC_result. 
@@ -34,17 +34,13 @@ Filen Button.c
 * Funktionen Button_enable_interrupt: Aktiverade globala avbrott. Bytt ut bitmakron. Användning av union Byte togs bort.
 * Funktionen Button_disable_interrupt: Bytt ut bitmakron. Användning av union Byte togs bort.
 
-Filen DynamicTimer.c
-
-Filen DynamicTimer.h
-
 Filen GPIO.h
 * Generella förändringar.
 
 Filen Led.c
 * Ändrade alla (*self) till -> operatorn eller punkt.
 * Generella förändringar. 
-* Skapade funktionerna static void delay(const uint16_t delay_time),  void Led_blink(struct Led* self, const uint16_t delay_time).
+* Skapade funktionerna static void delay(const uint16_t delay_time), void Led_blink(struct Led* self, const uint16_t delay_time).
 * Funktionen new_Led: Skapade ett objekt av strukten Led döpt self. 
 * Likt Button.c togs (*self).PIN = *PIN; bort och self.PIN = PIN – 8; lades till för PORTB.
 * Bytt ut bitmakron.
@@ -70,14 +66,19 @@ Filen Serial.h
 
 Filen Timer.c
 * Ändrade alla (*self) till -> operatorn eller punkt.
+* Generella förändringar.
+* Filen new_Timer: Tog bort if(!self) return NULL;
 * Bytt ut bitmakron
 * Lade till funktionsdeklarationer init_timer() och get_required_interrupts().
 
 Filen Timer.h
-
-Filen Vector.c
-
-Filen Vector.h
+* Bytt ut bitmakron.
+* Ettställde biten CS02 för att initiera Timer 0 i Normal Mode. 
+* Ettställde bitarna CS10 och CS12 för initiering av Timer 1 i CTC mode.
+* Vid ENABLE_TIMER1 TIMSK1 ändras ettställning från TOIE1 till OCIE1A för att aktivera timer1 i CTC mode.
+* I Strukten Timer sätts executed_interrupts till volatile, vilket indikerar för kompilator att variabelns innehåll kan ändras mycket plötsligt.
+* Bytt ut float till const double vid funktionsdeklarationerna för Timer_set och new_Timer.
+* Flyttat funktionsdeklarationer get_required_interrupts() och init_timer() till Timer.c
 
 Filen definitions.h
 * Tog bort bitmakron.
@@ -98,6 +99,7 @@ Filen main.c
 
 Filen setup.c
 * Lade till egna statiska funktioner för initiering av timers, GPIO, tempsensor. 
+* Lade till användning av funktionen serial_print som skriver ut "Dynamic temperature measurementsystem".
 * Timer 1 har ändrats från 500 till 60 000 motsvarande 60 sekunder.
 * Tagit bort 8 st rader:
 * unsigned char led1_PIN = 9;
@@ -107,4 +109,4 @@ Filen setup.c
 * enum TimerSelection timer1_selection = TIMER1;
 * float timer0_delay = 300;
 * float timer1_delay = 500;
-* Ändrade tilldelningarna av PINS, timers, delays ovan till motsvarande tilldelning, se exempel: button = new_Button(13); 
+* Ändrade tilldelningarna av PINS, timers, delays ovan till motsvarande tilldelning, se exempel: button = new_Button(13);
