@@ -11,10 +11,10 @@ MemoryBlock.c,
 MemoryBlock.h
 
 # Lade till nya filer: 
-Filen Vector.c,
-Filen Vector.h,
-Filen DynamicTimer.c,
-Filen DynamicTimer.h
+Vector.c,
+Vector.h,
+DynamicTimer.c,
+DynamicTimer.h
 
 Dessa filer har implementerats för att vid genomsninttstiden mellan varje knapptryckning skall avgöra hur ofta 
 temperaturmätningarna skall ske, via lagring i en dynamisk behållare.
