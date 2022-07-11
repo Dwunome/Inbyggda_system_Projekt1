@@ -1,27 +1,29 @@
 // Inkluderingsdirektiv:
 #include "Timer.h"
-// La in båda nedansående:
+
 static void init_timer(const TimerSelection timerSelection);
 static inline uint32_t get_required_interrupts(const double delay_time);
+
 /******************************************************************************
-* Funktionen new_Timer används för att skapa och initiera objekt av strukten 
-* Timer. Ingående argument timerSelection används för att välja vilken av
-* timerkretsar Timer 0 - 2 som skall användas, medan delay_time utgörs av
-* den fördröjningstid som timern skall räkna till, mätt i millisekunder.
+* Funktionen new_Timer anvÃ¤nds fÃ¶r att skapa och initiera objekt av strukten 
+* Timer. IngÃ¥ende argument timerSelection anvÃ¤nds fÃ¶r att vÃ¤lja vilken av
+* timerkretsar Timer 0 - 2 som skall anvÃ¤ndas, medan delay_time utgÃ¶rs av
+* den fÃ¶rdrÃ¶jningstid som timern skall rÃ¤kna till, mÃ¤tt i millisekunder.
 *
-* Först allokeras minne för ett nytt objekt av strukten Timer, som döps 
+* FÃ¶rst allokeras minne fÃ¶r ett nytt objekt av strukten Timer, som dÃ¶ps 
 * till self. Om minnesallokeringen misslyckas returneras NULL direkt. Annars
-* initieras struktens medlemmar; enabled sätts till false för att indikera
-* att timer-kretsen är avstängd vid start, vald timerkrets sparas via 
-* medlemmen timerSelection, antalet exekverade avbrott sätts till noll vid
-* start, medan antalet avbrott som krävs för specificerad fördröjningstid
-* beräknas via anrop av funktionen get_required_interrupts, där ingående 
-* argument delay_time passeras som parameter. Returvärdet från detta anrop,
-* vilket är beräknat antalet avbrott som krävs för specificerad fördröjningtid, 
+* initieras struktens medlemmar; enabled sÃ¤tts till false fÃ¶r att indikera
+* att timer-kretsen Ã¤r avstÃ¤ngd vid start, vald timerkrets sparas via 
+* medlemmen timerSelection, antalet exekverade avbrott sÃ¤tts till noll vid
+* start, medan antalet avbrott som krÃ¤vs fÃ¶r specificerad fÃ¶rdrÃ¶jningstid
+* berÃ¤knas via anrop av funktionen get_required_interrupts, dÃ¤r ingÃ¥ende 
+* argument delay_time passeras som parameter. ReturvÃ¤rdet frÃ¥n detta anrop,
+* vilket Ã¤r berÃ¤knat antalet avbrott som krÃ¤vs fÃ¶r specificerad fÃ¶rdrÃ¶jningtid, 
 * lagras sedan via medlemmen required_interrupts. Slutligen returneras det nu 
-* initierade objektet self, som är redo att användas för implementering av 
+* initierade objektet self, som Ã¤r redo att anvÃ¤ndas fÃ¶r implementering av 
 * en given timerkrets.
 ******************************************************************************/
+
 struct Timer new_Timer(const TimerSelection timerSelection, const double delay_time) 
 {
 	struct Timer self;
@@ -35,90 +37,121 @@ struct Timer new_Timer(const TimerSelection timerSelection, const double delay_t
 }
 
 /******************************************************************************
-* Funktionen Timer_on används för att aktivera en given timer. Ingående
-* argument self utgör en pekare till ett timerobjekt, vars medlem 
-* timerSelection undersöks för att ta reda på vilken timerkrets som skall
-* aktiveras. Aktuell timerkrets aktiveras, följt av att medlemmen enabled 
-* sätts till true för att indikera att timern i fråga nu är aktiverad.
+* Funktionen Timer_on anvÃ¤nds fÃ¶r att aktivera en given timer. IngÃ¥ende
+* argument self utgÃ¶r en pekare till ett timerobjekt, vars medlem 
+* timerSelection undersÃ¶ks fÃ¶r att ta reda pÃ¥ vilken timerkrets som skall
+* aktiveras. Aktuell timerkrets aktiveras, fÃ¶ljt av att medlemmen enabled 
+* sÃ¤tts till true fÃ¶r att indikera att timern i frÃ¥ga nu Ã¤r aktiverad.
 ******************************************************************************/
+
 void Timer_on(struct Timer* self) 
 {
 	if (self->timerSelection == TIMER0)
+	{
 		TIMSK0 = (1 << TOIE0);
+	}
+	
 	else if (self->timerSelection == TIMER1)
+	{
 		TIMSK1 = (1 << OCIE1A);
+	}
+	
 	else if (self->timerSelection == TIMER2)
+	{
 		TIMSK2 = (1 << TOIE2);
+	}
+	
 	self->enabled = true;
 	return;
 }
 
 /******************************************************************************
-* Funktionen Timer_off används för att inaktivera en given timer. Ingående
-* argument self utgör en pekare till ett timerobjekt, vars medlem
-* timerSelection undersöks för att ta reda på vilken timerkrets som skall
-* inaktiveras. Aktuell timerkrets inaktiveras, följt av att medlemmen enabled
-* sätts till false för att indikera att timern i fråga nu är inaktiverad.
+* Funktionen Timer_off anvÃ¤nds fÃ¶r att inaktivera en given timer. IngÃ¥ende
+* argument self utgÃ¶r en pekare till ett timerobjekt, vars medlem
+* timerSelection undersÃ¶ks fÃ¶r att ta reda pÃ¥ vilken timerkrets som skall
+* inaktiveras. Aktuell timerkrets inaktiveras, fÃ¶ljt av att medlemmen enabled
+* sÃ¤tts till false fÃ¶r att indikera att timern i frÃ¥ga nu Ã¤r inaktiverad.
 ******************************************************************************/
+
  void Timer_off(struct Timer* self)
 {
 	if (self->timerSelection == TIMER0)
+	{
 		TIMSK0 = 0x00;
+	}
+	
 	else if (self->timerSelection == TIMER1)
+	{
 		TIMSK1 = 0x00;
+	}
+	
 	else if (self->timerSelection == TIMER2)
+	{
 		TIMSK2 = 0x00;
+	}
+	
 	self->enabled = false;
 	return;
 }
 
 /******************************************************************************
-* Funktionen Timer_toggle används för att toggla aktivering av en given timer.
-* Ingående argument self utgör en pekare till ett timerobjekt, vars medlem
-* enabled undersöks för att ta reda på om timern just nu är aktiverad eller 
-* inte. Om timern för tillfället är aktiverad (enabled är true), så stängs den
-* av via funktionen Timer_off, som anropas via pekaren off. Däremot om timern 
-* för tillfället är inaktiverad (enabled är false), så stängs den av via 
+* Funktionen Timer_toggle anvÃ¤nds fÃ¶r att toggla aktivering av en given timer.
+* IngÃ¥ende argument self utgÃ¶r en pekare till ett timerobjekt, vars medlem
+* enabled undersÃ¶ks fÃ¶r att ta reda pÃ¥ om timern just nu Ã¤r aktiverad eller 
+* inte. Om timern fÃ¶r tillfÃ¤llet Ã¤r aktiverad (enabled Ã¤r true), sÃ¥ stÃ¤ngs den
+* av via funktionen Timer_off, som anropas via pekaren off. DÃ¤remot om timern 
+* fÃ¶r tillfÃ¤llet Ã¤r inaktiverad (enabled Ã¤r false), sÃ¥ stÃ¤ngs den av via 
 * funktionen Timer_on, som anropas via pekaren on.
 ******************************************************************************/
 void Timer_toggle(struct Timer* self) 
 {
 	if (self->enabled)
+	{
 		Timer_off(self);
+	}
+	
 	else
+	{
 		Timer_on(self);
+	}
+	
 	return;
 }
 
 /******************************************************************************
-* Funktionen Timer_count används för att räkna antalet exekverade avbrott som
-* har ägt rum. Om timern i fråga är aktiverad så räknas antalet exekverade
+* Funktionen Timer_count anvÃ¤nds fÃ¶r att rÃ¤kna antalet exekverade avbrott som
+* har Ã¤gt rum. Om timern i frÃ¥ga Ã¤r aktiverad sÃ¥ rÃ¤knas antalet exekverade
 * avbrott upp via inkrementering av medlemmen executed_interrupts. Annars
-* om timern är inaktiverad sker ingen uppräkning, så att timern inte av 
-* misstag skall löpa ut och orsaka avbrott när den är avstängd.
+* om timern Ã¤r inaktiverad sker ingen upprÃ¤kning, sÃ¥ att timern inte av 
+* misstag skall lÃ¶pa ut och orsaka avbrott nÃ¤r den Ã¤r avstÃ¤ngd.
 ******************************************************************************/
+
 void Timer_count(struct Timer* self) 
 {
 	if (self->enabled)
+	{
 		self->executed_interrupts++;
+	}
+	
 	return;
 }
 
 /******************************************************************************
-* Funktionen Timer_elapsed används för att undersöka ifall en given timer 
-* har löpt ut och i så fall nollställa timern. Ingående argument self utgör en
-* pekare till ett timerobjekt. För att ta reda på ifall timern har löpt ut så
-* undersöks antalet exekverade avbrott, vilket lagras av timerobjektets medlem 
-* executed_interrupts) mot antalet avbrott som krävs för aktuell fördröjning 
-* som timern skall medföra, vilket lagras av medlemmen required_interrupts. 
+* Funktionen Timer_elapsed anvÃ¤nds fÃ¶r att undersÃ¶ka ifall en given timer 
+* har lÃ¶pt ut och i sÃ¥ fall nollstÃ¤lla timern. IngÃ¥ende argument self utgÃ¶r en
+* pekare till ett timerobjekt. FÃ¶r att ta reda pÃ¥ ifall timern har lÃ¶pt ut sÃ¥
+* undersÃ¶ks antalet exekverade avbrott, vilket lagras av timerobjektets medlem 
+* executed_interrupts) mot antalet avbrott som krÃ¤vs fÃ¶r aktuell fÃ¶rdrÃ¶jning 
+* som timern skall medfÃ¶ra, vilket lagras av medlemmen required_interrupts. 
 *
-* Om timern har löpt ut så kommer antalet exekverade avbrott överstiga eller 
-* vara lika med antalet avbrott som krävs för fördröjningen. Om detta är fallet
-* så nollställs antalet exekverade avbrott, vilket motsvarar att timern
-* nollställs, följt av att true returneras för att indikera att timern har 
-* har löpt ut. Annars om timern inte har löpt ut så returneras false utan att
-* timern nollställs. 
+* Om timern har lÃ¶pt ut sÃ¥ kommer antalet exekverade avbrott Ã¶verstiga eller 
+* vara lika med antalet avbrott som krÃ¤vs fÃ¶r fÃ¶rdrÃ¶jningen. Om detta Ã¤r fallet
+* sÃ¥ nollstÃ¤lls antalet exekverade avbrott, vilket motsvarar att timern
+* nollstÃ¤lls, fÃ¶ljt av att true returneras fÃ¶r att indikera att timern har 
+* har lÃ¶pt ut. Annars om timern inte har lÃ¶pt ut sÃ¥ returneras false utan att
+* timern nollstÃ¤lls. 
 ******************************************************************************/
+
 bool Timer_elapsed(struct Timer* self)
 {
 	if (self->executed_interrupts >= self->required_interrupts)
@@ -131,10 +164,11 @@ bool Timer_elapsed(struct Timer* self)
 }
 
 /******************************************************************************
-* Funktionen Timer_clear används för att nollställa en given timer. Ingående
-* argument self utgör en pekare till ett timerobjekt, vars medlem 
-* executed_interrupts nollställs för att därigenom nollställs timerkretsen.
+* Funktionen Timer_clear anvÃ¤nds fÃ¶r att nollstÃ¤lla en given timer. IngÃ¥ende
+* argument self utgÃ¶r en pekare till ett timerobjekt, vars medlem 
+* executed_interrupts nollstÃ¤lls fÃ¶r att dÃ¤rigenom nollstÃ¤lls timerkretsen.
 ******************************************************************************/
+
 void Timer_clear(struct Timer* self)
 {
 	self->executed_interrupts = 0x00;
@@ -143,12 +177,13 @@ void Timer_clear(struct Timer* self)
 
 
 /******************************************************************************
-* Funktionen Timer_reset används för att återställa en given timer, vilket
-* innebär att timern stängs av och nollställs. Först stängs timern av via
-* funktionen Timer_off, som anropas via pekaren off. Därefter nollställs antalet
-* exekverade avbrott för att nollställs timern, vilket sker via nollställning
+* Funktionen Timer_reset anvÃ¤nds fÃ¶r att Ã¥terstÃ¤lla en given timer, vilket
+* innebÃ¤r att timern stÃ¤ngs av och nollstÃ¤lls. FÃ¶rst stÃ¤ngs timern av via
+* funktionen Timer_off, som anropas via pekaren off. DÃ¤refter nollstÃ¤lls antalet
+* exekverade avbrott fÃ¶r att nollstÃ¤lls timern, vilket sker via nollstÃ¤llning
 * av timerobjektets medlem executed_interrupts.
 ******************************************************************************/
+
 void Timer_reset(struct Timer* self) 
 {
 	Timer_off(self);
@@ -157,13 +192,14 @@ void Timer_reset(struct Timer* self)
 }
 
 /******************************************************************************
-* Funktionen Timer_set används för att uppdatera fördröjningstiden på en given
-* timer. Ingående argument self utgörs av en pekare till ett timerobjekt, 
-* medan delay_time utgör den nya fördröjningstiden, mätt i millisekunder.
-* Timerns fördröjningstid, som lagras av medlemmen required_interrupts, 
-* uppdateras via anrop av funktionen get_required_interrupts, där ingående
-* argument delay_time passeras som ingående argument.
+* Funktionen Timer_set anvÃ¤nds fÃ¶r att uppdatera fÃ¶rdrÃ¶jningstiden pÃ¥ en given
+* timer. IngÃ¥ende argument self utgÃ¶rs av en pekare till ett timerobjekt, 
+* medan delay_time utgÃ¶r den nya fÃ¶rdrÃ¶jningstiden, mÃ¤tt i millisekunder.
+* Timerns fÃ¶rdrÃ¶jningstid, som lagras av medlemmen required_interrupts, 
+* uppdateras via anrop av funktionen get_required_interrupts, dÃ¤r ingÃ¥ende
+* argument delay_time passeras som ingÃ¥ende argument.
 ******************************************************************************/
+
 void Timer_set(struct Timer* self, const double delay_time) 
 {
 	self->required_interrupts = get_required_interrupts(delay_time);
@@ -171,31 +207,34 @@ void Timer_set(struct Timer* self, const double delay_time)
 }
 
 /******************************************************************************
-* Funktionen init_timer används för att initiera en given timerkrets för en
-* uppräkningstid där ett avbrott sker var 0.016:e millisekund vid uppräkning
-* till 256, då overflow- eller CTC-avbrott sker, beroende på använd timerkrets. 
-* Ingående argument timerSelection indikerar vilken timer som skall initieras.
+* Funktionen init_timer anvÃ¤nds fÃ¶r att initiera en given timerkrets fÃ¶r en
+* upprÃ¤kningstid dÃ¤r ett avbrott sker var 0.016:e millisekund vid upprÃ¤kning
+* till 256, dÃ¥ overflow- eller CTC-avbrott sker, beroende pÃ¥ anvÃ¤nd timerkrets. 
+* IngÃ¥ende argument timerSelection indikerar vilken timer som skall initieras.
 *
-* Först aktiveras avbrott globalt via ettställning av I-flaggan i statusregistret
-* SREG. Denna bit måste alltid vara ettställd för att timergenererade avbrott
-* skall kunna implementeras. Sedan initeras aktuell timerkrets, där de 8-bitars 
-* timerkretsarna Timer 0 samt Timer 2 initieras i Normal Mode, vilket innebär 
-* uppräkning tills overflow sker (efter uppräkning till 256, som inte ryms i 
+* FÃ¶rst aktiveras avbrott globalt via ettstÃ¤llning av I-flaggan i statusregistret
+* SREG. Denna bit mÃ¥ste alltid vara ettstÃ¤lld fÃ¶r att timergenererade avbrott
+* skall kunna implementeras. Sedan initeras aktuell timerkrets, dÃ¤r de 8-bitars 
+* timerkretsarna Timer 0 samt Timer 2 initieras i Normal Mode, vilket innebÃ¤r 
+* upprÃ¤kning tills overflow sker (efter upprÃ¤kning till 256, som inte ryms i 
 * 8-bitars register).
 * 
-* För den 16-bitars timerkretsen Timer 1 används CTC Mode (Clear Timer On 
-* Compare), där maxvärdet för uppräkning sätts till 256 för att matcha de
-* andra två timerkretsarna, så att avbrott sker lika ofta för respektive 
-* timer. Eftersom Timer 1 vid uppräkning till 256 är långt från full används
-* därmed CTC Mode, där timern nollställs automatiskt vid uppräkning till
-* förvalt maxvärde, vilket i detta fall är 256.
+* FÃ¶r den 16-bitars timerkretsen Timer 1 anvÃ¤nds CTC Mode (Clear Timer On 
+* Compare), dÃ¤r maxvÃ¤rdet fÃ¶r upprÃ¤kning sÃ¤tts till 256 fÃ¶r att matcha de
+* andra tvÃ¥ timerkretsarna, sÃ¥ att avbrott sker lika ofta fÃ¶r respektive 
+* timer. Eftersom Timer 1 vid upprÃ¤kning till 256 Ã¤r lÃ¥ngt frÃ¥n full anvÃ¤nds
+* dÃ¤rmed CTC Mode, dÃ¤r timern nollstÃ¤lls automatiskt vid upprÃ¤kning till
+* fÃ¶rvalt maxvÃ¤rde, vilket i detta fall Ã¤r 256.
 ******************************************************************************/
+
 static void init_timer(const TimerSelection timerSelection) 
 {
 	asm("SEI"); 
 	
 	if (timerSelection == TIMER0) 
+	{
 		TCCR0B = (1 << CS00); 
+	}
 	
 	else if (timerSelection == TIMER1)
 	{
@@ -204,21 +243,24 @@ static void init_timer(const TimerSelection timerSelection)
 	}
 	
 	else if (timerSelection == TIMER2)
+	{
 		TCCR2B = (1 << CS20); 
+	}
 	
 	return;
 }
 
 /******************************************************************************
-* Funktionen get_required_interrupts används för att beräkna och antalet
-* avbrott som krävs för en given fördröjningstid. Ingående argument delay_time
-* utgörs av specificerad fördröjningstid mätt i millisekunder. Antalet avbrott
-* som krävs för aktuell fördröjning beräknas som kvoten av specificerad 
-* fördröjningstid genom tiden mellan varje avbrott, vilket i detta fall är
-* satt till 0.016 ms, här implementerat via makrot INTERRUPT_TIME. Antalet
-* avbrott som krävs för specificerad fördröjningstid avrundas till närmaste
+* Funktionen get_required_interrupts anvÃ¤nds fÃ¶r att berÃ¤kna och antalet
+* avbrott som krÃ¤vs fÃ¶r en given fÃ¶rdrÃ¶jningstid. IngÃ¥ende argument delay_time
+* utgÃ¶rs av specificerad fÃ¶rdrÃ¶jningstid mÃ¤tt i millisekunder. Antalet avbrott
+* som krÃ¤vs fÃ¶r aktuell fÃ¶rdrÃ¶jning berÃ¤knas som kvoten av specificerad 
+* fÃ¶rdrÃ¶jningstid genom tiden mellan varje avbrott, vilket i detta fall Ã¤r
+* satt till 0.016 ms, hÃ¤r implementerat via makrot INTERRUPT_TIME. Antalet
+* avbrott som krÃ¤vs fÃ¶r specificerad fÃ¶rdrÃ¶jningstid avrundas till nÃ¤rmaste
 * heltal via anrop av funktionen round_to_integer och returneras sedan.
 ******************************************************************************/
+
 static inline uint32_t get_required_interrupts(const double delay_time)
 {
 	return (uint32_t)(delay_time / INTERRUPT_TIME + 0.5);
