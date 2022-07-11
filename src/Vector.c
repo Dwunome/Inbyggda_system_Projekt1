@@ -1,13 +1,14 @@
 #include "Vector.h"
 
-/*
-* Funktionen new_Vector används för att initiera en ny dynamisk array. Först
-* deklareras ett objekt av strukten Vector, döpt self. Sedan sätt pekaren data
-* till en nullpekare, detta då den ej har någon befintlig minnesadress som den 
-* kan peka på vid start. Instansvariabeln elements sätts till 0 vid start då 
-* arrayen är tom vid start. 
+/******************************************************************************
+* Funktionen new_Vector anvÃ¤nds fÃ¶r att initiera en ny dynamisk array. FÃ¶rst
+* deklareras ett objekt av strukten Vector, dÃ¶pt self. Sedan sÃ¤tt pekaren data
+* till en nullpekare, detta dÃ¥ den ej har nÃ¥gon befintlig minnesadress som den 
+* kan peka pÃ¥ vid start. Instansvariabeln elements sÃ¤tts till 0 vid start dÃ¥ 
+* arrayen Ã¤r tom vid start. 
 * Slutligen returneras objektet self. 
-*/
+******************************************************************************/
+
 struct Vector new_Vector(void)
 {
 	struct Vector self; 
@@ -16,14 +17,15 @@ struct Vector new_Vector(void)
 	return self;
 }
 
-/*
-* Funtionen används för att kunna uppdatera den dynamiska vektorns storlek.
-* Om den nya storleken är noll, frigör allt minne och avsluta funktionen, 
-* via anrop av funktionen Vector_clear. Annars omallokeras fältet data
+/******************************************************************************
+* Funtionen anvÃ¤nds fÃ¶r att kunna uppdatera den dynamiska vektorns storlek.
+* Om den nya storleken Ã¤r noll, frigÃ¶r allt minne och avsluta funktionen, 
+* via anrop av funktionen Vector_clear. Annars omallokeras fÃ¤ltet data
 * med en kopia efter den nya storleken. 
-* Sedan sätts ordinarie pekare data till att peka på det nya fältet och 
-* därefter uppdateras antalet element.
-*/
+* Sedan sÃ¤tts ordinarie pekare data till att peka pÃ¥ det nya fÃ¤ltet och 
+* dÃ¤refter uppdateras antalet element.
+******************************************************************************/
+
 void Vector_resize(struct Vector* self, const size_t new_size)
 {
 	if (!new_size)
@@ -39,11 +41,12 @@ void Vector_resize(struct Vector* self, const size_t new_size)
 	return;
 }
 
-/*
-* Först omallokeras fältet så att det rymmer ett tal till, änvänder 
-* en kopia. Sedan läggs det nya elementet längst bak i arrayen och 
-* därefter sätts datapekaren till att peka på det nya fältet.
-*/
+/******************************************************************************
+* FÃ¶rst omallokeras fÃ¤ltet sÃ¥ att det rymmer ett tal till, anvÃ¤nder 
+* en kopia. Sedan lÃ¤ggs det nya elementet lÃ¤ngst bak i arrayen och 
+* dÃ¤refter sÃ¤tts datapekaren till att peka pÃ¥ det nya fÃ¤ltet.
+******************************************************************************/
+
 void Vector_push(struct Vector* self, const uint32_t new_element)
 {
 	uint32_t* copy = (uint32_t*)realloc(self->data, sizeof(uint32_t) * (self->elements + 1)); 
@@ -53,11 +56,12 @@ void Vector_push(struct Vector* self, const uint32_t new_element)
 	return;
 }
 
-/*
-* Funktionen används för att kunna tömma en dynamisk array och frigöra
-* dess minne. Först sker en deallokering via anrop av funktionen free, 
-* där datapekaren som pekar på det allokerarade minnet passerar.
-*/
+/******************************************************************************
+* Funktionen anvÃ¤nds fÃ¶r att kunna tÃ¶mma en dynamisk array och frigÃ¶ra
+* dess minne. FÃ¶rst sker en deallokering via anrop av funktionen free, 
+* dÃ¤r datapekaren som pekar pÃ¥ det allokerarade minnet passerar.
+******************************************************************************/
+
 void Vector_clear(struct Vector* self)
 {
 	free(self->data);
@@ -66,13 +70,14 @@ void Vector_clear(struct Vector* self)
 	return;
 }
 
-/*
-* Funktionen Vector_set används för att skriva över ett gammalt element.
-* Ingående argument index utgör index till det element som skall skrivas över,
-* medan new_element utgör det nya värdet. Om angivet index ligger utanför
-* arrayen så görs ingen skrivning. Annars läggs det nya elementet på angivet
+/******************************************************************************
+* Funktionen Vector_set anvÃ¤nds fÃ¶r att skriva Ã¶ver ett gammalt element.
+* IngÃ¥ende argument index utgÃ¶r index till det element som skall skrivas Ã¶ver,
+* medan new_element utgÃ¶r det nya vÃ¤rdet. Om angivet index ligger utanfÃ¶r
+* arrayen sÃ¥ gÃ¶rs ingen skrivning. Annars lÃ¤ggs det nya elementet pÃ¥ angivet
 * index.
-*/
+******************************************************************************/
+
 void Vector_set(struct Vector* self, const size_t index, const uint32_t new_element)
 {
 	if (index >= self->elements) return;
@@ -80,12 +85,13 @@ void Vector_set(struct Vector* self, const size_t index, const uint32_t new_elem
 	return;
 }
 
-/*
-* Funktionen används för att kunna beräkna medelvärdet av alla lagrade tal.
-* Om arrayen är tom så returneras noll som medelvärde, annars beräknas 
-* summan av alla tal via anrop av funktionen Vector_sum. Slutligen så
+/******************************************************************************
+* Funktionen anvÃ¤nds fÃ¶r att kunna berÃ¤kna medelvÃ¤rdet av alla lagrade tal.
+* Om arrayen Ã¤r tom sÃ¥ returneras noll som medelvÃ¤rde, annars berÃ¤knas 
+* summan av alla tal via anrop av funktionen Vector_sum. Slutligen sÃ¥
 * returneras summan. 
-*/
+******************************************************************************/
+
 double Vector_average(const struct Vector* self)
 {
 	if (!self->elements) return 0;
@@ -93,13 +99,14 @@ double Vector_average(const struct Vector* self)
 	return sum / (double)(self->elements);
 }
 
-/*
-* Funktionen används för att skriva ut innehållet i arrayen.
-* Om arrayen är tom så avslutas funktionen.
-* Annars initieras seriell överföring med anrop av funktionen
+/******************************************************************************
+* Funktionen anvÃ¤nds fÃ¶r att skriva ut innehÃ¥llet i arrayen.
+* Om arrayen Ã¤r tom sÃ¥ avslutas funktionen.
+* Annars initieras seriell Ã¶verfÃ¶ring med anrop av funktionen
 * init_serial. Sedan skrivs antal och summa av element ut, samt det 
-* avrundade värdet. 
-*/
+* avrundade vÃ¤rdet. 
+******************************************************************************/
+
 void Vector_print(const struct Vector* self)
 {
 	if (!self->elements) return;
@@ -115,12 +122,13 @@ void Vector_print(const struct Vector* self)
 	return;
 }
 
-/*
-* Funktionen används för att kunna beräkna summa av alla befintliga 
-* element i arrayen. Om arrayen är tom så returneras 0. Annars sätts
-* räknaren för summa till värdet 0 vid start, därefter körs en for-sats
-* som räknar upp till self->elements. Sedan returneras summan.
-*/
+/******************************************************************************
+* Funktionen anvÃ¤nds fÃ¶r att kunna berÃ¤kna summa av alla befintliga 
+* element i arrayen. Om arrayen Ã¤r tom sÃ¥ returneras 0. Annars sÃ¤tts
+* rÃ¤knaren fÃ¶r summa till vÃ¤rdet 0 vid start, dÃ¤refter kÃ¶rs en for-sats
+* som rÃ¤knar upp till self->elements. Sedan returneras summan.
+******************************************************************************/
+
 uint32_t Vector_sum(const struct Vector* self)
 {
 	
