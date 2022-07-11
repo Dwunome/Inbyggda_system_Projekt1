@@ -4,37 +4,35 @@
 // Inkluderingsdirektiv: 
 #include "definitions.h"
 
-// static void delay(const uint16_t delay_time);
-
 /******************************************************************************
-* Strukten Led används för implementering av lysdioder, som kan placeras på
-* någon av digitala PINs 0 - 13 på Arduino Uno. Varje lysdiod kan tändas, 
-* släckas och togglas.
+* Strukten Led anvÃ¤nds fÃ¶r implementering av lysdioder, som kan placeras pÃ¥
+* nÃ¥gon av digitala PINs 0 - 13 pÃ¥ Arduino Uno. Varje lysdiod kan tÃ¤ndas, 
+* slÃ¤ckas och togglas.
 ******************************************************************************/
 struct Led 
 {
-	uint8_t PIN;		// Skapar en medlem av datatypen uint8_t som lagrar det önskat PIN-nummer som man vill ansluta sin LED till.
-	bool enabled;		// Skapar en medlem av datatypen bool som döps till enabled, som indikerar om lysdioden är på eller inte.
-	IO_port io_port;	// Skapar en medlem av datatypen/enumerationen IO_port som döps till io_port, för att lagra vilken IO-port som skall användas för led.
+	uint8_t PIN;		// Skapar en medlem av datatypen uint8_t som lagrar det Ã¶nskat PIN-nummer som man vill ansluta sin LED till.
+	bool enabled;		// Skapar en medlem av datatypen bool som dÃ¶ps till enabled, som indikerar om lysdioden Ã¤r pÃ¥ eller inte.
+	IO_port io_port;	// Skapar en medlem av datatypen/enumerationen IO_port som dÃ¶ps till io_port, fÃ¶r att lagra vilken IO-port som skall anvÃ¤ndas fÃ¶r led.
 };
 
 /******************************************************************************
-* Strukten Button används för implementering av tryckknappar, som kan placeras 
-* på någon av digitala PINs 0 - 13 på Arduino Uno. Det finns möjlighet att
-* enkelt läsa av ifall tryckknappen är nedtryckt. Det finns också möjlighet 
-* att aktivera samt inaktivera PCI-avbrott på tryckknappens PIN.
+* Strukten Button anvÃ¤nds fÃ¶r implementering av tryckknappar, som kan placeras 
+* pÃ¥ nÃ¥gon av digitala PINs 0 - 13 pÃ¥ Arduino Uno. Det finns mÃ¶jlighet att
+* enkelt lÃ¤sa av ifall tryckknappen Ã¤r nedtryckt. Det finns ocksÃ¥ mÃ¶jlighet 
+* att aktivera samt inaktivera PCI-avbrott pÃ¥ tryckknappens PIN.
 * 
-* Avbrottsvektorer gällande PCI-avbrott för respektive I/O-port är följande:
+* Avbrottsvektorer gÃ¤llande PCI-avbrott fÃ¶r respektive I/O-port Ã¤r fÃ¶ljande:
 *
 * I/O-port B (PIN 8 - 13): PCINT0_vect
-* I/O-port C (PIN A0 - A5): PCINT1_vect - används dock inte för tryckknappar.
+* I/O-port C (PIN A0 - A5): PCINT1_vect - anvÃ¤nds dock inte fÃ¶r tryckknappar.
 * I/O-port D (PIN 0 - 7): PCINT2_vect
 ******************************************************************************/
 struct Button 
 {
-	uint8_t PIN;			// Skapar en medlem av datatypen uint8_t som lagrar det önskat PIN-nummer som man vill ansluta sin knapp till. 
-	IO_port io_port;		// Skapar en medlem av datatypen/enumerationen IO_port som döps till io_port, för att lagra vilken IO-port som skall användas för led. 
-	bool interrupt_enabled; // Skapar en medlem av datatypen bool som döps till interrupt_enabled, som om indikerar PCI-avbrott är aktiverat. 
+	uint8_t PIN;			// Skapar en medlem av datatypen uint8_t som lagrar det Ã¶nskat PIN-nummer som man vill ansluta sin knapp till. 
+	IO_port io_port;		// Skapar en medlem av datatypen/enumerationen IO_port som dÃ¶ps till io_port, fÃ¶r att lagra vilken IO-port som skall anvÃ¤ndas fÃ¶r led. 
+	bool interrupt_enabled; // Skapar en medlem av datatypen bool som dÃ¶ps till interrupt_enabled, som om indikerar PCI-avbrott Ã¤r aktiverat. 
 };
 
 // Funktionsdeklarationer:
