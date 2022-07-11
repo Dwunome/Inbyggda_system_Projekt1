@@ -5,15 +5,15 @@ Uppgift: Felsök och korrigera en befintlig C-kod från C89 till C99.
 
 
 Borttagna filer: 
-Byte.c 
-Byte.h 
-MemoryBlock.c 
+Byte.c, 
+Byte.h, 
+MemoryBlock.c, 
 MemoryBlock.h
 
 Lade till nya filer: 
-Filen Vector.c
-Filen Vector.h
-Filen DynamicTimer.c
+Filen Vector.c,
+Filen Vector.h,
+Filen DynamicTimer.c,
 Filen DynamicTimer.h
 Dessa har implementerats för att vid genomsninttstiden mellan varje knapptryckning skall avgöra hur ofta 
 temperaturmätningarna skall ske, via lagring i en dynamisk behållare som i detta fall håller upp till 10 värden.
