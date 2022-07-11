@@ -6,7 +6,7 @@
 #include "Vector.h"
 #include "Serial.h"
 
-#define MAX_CAPACITY 256 			// Max antal element som kan lagras i dynamisk array.
+#define MAX_CAPACITY 10 			// Max antal element som kan lagras i dynamisk array.
 
 /************************************************************************
 * Strukten DnamicTimer används för att implementera en dynamsisk timer
