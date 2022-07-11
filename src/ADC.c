@@ -4,17 +4,13 @@
 static void init_ADC(void);
 static uint16_t ADC_read(const uint8_t PIN);
 
-/*
-* EDIT: Tog bort minnesallokering för struct tempsensor
-*/
-
 /******************************************************************************
-* Funktionen new_TempSensor används för implementering av en temperatursensor 
-* ansluten till någon av analoga pinnar A0 - A5 via ett objekt av strukten
-* TempSensor. Ingående argument PIN utgör en pekare till aktuellt PIN-nummer. 
-* Ett objekt av strukten TempsSensor deklareras och döps till self, där sparas 
+* Funktionen new_TempSensor anvÃ¤nds fÃ¶r implementering av en temperatursensor 
+* ansluten till nÃ¥gon av analoga pinnar A0 - A5 via ett objekt av strukten
+* TempSensor. IngÃ¥ende argument PIN utgÃ¶r en pekare till aktuellt PIN-nummer. 
+* Ett objekt av strukten TempsSensor deklareras och dÃ¶ps till self, dÃ¤r sparas 
 * aktuellt PIN-nummer. AD-omvandlaren initieras sedan via anrop av statiska 
-* funktionen init_ADC. Sedan returneras objektet för användning.
+* funktionen init_ADC. Sedan returneras objektet fÃ¶r anvÃ¤ndning.
 ******************************************************************************/
 struct TempSensor new_TempSensor(const uint8_t PIN)
 {
@@ -25,26 +21,26 @@ struct TempSensor new_TempSensor(const uint8_t PIN)
 }
 
 /******************************************************************************
-* Funktionen print_temperature används för att läsa av rumstemperaturen och 
-* skriva till vår PC. Först läses temperatursensorn av och resultatet lagras 
-* i konstanten ADC_result. Därefter beräknas motsvarande analoga inspänning Uin 
-* med följande formel:
-*							input_voltage = Vcc * ADC_result / ADC_MAX,
+* Funktionen print_temperature anvÃ¤nds fÃ¶r att lÃ¤sa av rumstemperaturen och 
+* skriva till vÃ¥r PC. FÃ¶rst lÃ¤ses temperatursensorn av och resultatet lagras 
+* i konstanten ADC_result. DÃ¤refter berÃ¤knas motsvarande analoga inspÃ¤nning Uin 
+* med fÃ¶ljande formel:
+
+* input_voltage = Vcc * ADC_result / ADC_MAX,
 *
-* där ADC_result är resultatet från senaste AD-omvandling (0 - 1023).
+* dÃ¤r ADC_result Ã¤r resultatet frÃ¥n senaste AD-omvandling (0 - 1023).
+* DÃ¤refter berÃ¤knas motsvarande temperatur i grader Celcius via fÃ¶ljande formel:
 *
-* Därefter beräknas motsvarande temperatur i grader Celcius via följande formel:
+* temperatur = 100 * Uin - 50,
 *
-*							temperatur = 100 * Uin - 50,
+* dÃ¤r Uin Ã¤r den berÃ¤knade analoga inspÃ¤nningen (0 - 5 V).
 *
-* där Uin är den beräknade analoga inspänningen (0 - 5 V).
-*
-* Temperaturen som beräknas lagras i konstanten temperature. Det värdet avrundas 
-* till närmsta heltal och lagras i konstanten rounded_temperature. Sedan 
-* transmitterras serial_print_integer, som möjliggör sammansättning av text och
-* heltal, samt seriell överföring. Med det klart så transmitteras 
+* Temperaturen som berÃ¤knas lagras i konstanten temperature. Det vÃ¤rdet avrundas 
+* till nÃ¤rmsta heltal och lagras i konstanten rounded_temperature. Sedan 
+* transmitterras serial_print_integer, som mÃ¶jliggÃ¶r sammansÃ¤ttning av text och
+* heltal, samt seriell Ã¶verfÃ¶ring. Med det klart sÃ¥ transmitteras 
 * textstycket: "Temperature: %ld degress Celcius\n".
-* %ld är en formatspecificerare för heltal och ersätts med avläst temperatur.
+* %ld Ã¤r en formatspecificerare fÃ¶r heltal och ersÃ¤tts med avlÃ¤st temperatur.
 ******************************************************************************/
 void print_temperature(const struct TempSensor* self)
 {
@@ -58,13 +54,13 @@ void print_temperature(const struct TempSensor* self)
  
   /******************************************************************************
   * Funktionen init_ADC las till vid korrigering av koden:
-  * Funktionen init_ADC används för att initiera AD-omvandlaren. Först sätts
-  * AD-omvandlaren till att matas med intern matningsspänning. Därefter aktiveras
-  * AD-omvandlaren och startas med lägsta möjliga frekvens (125 kHz) för högsta
-  * möjliga precision. Därefter väntar vi till att AD-omvandlingen är slutförd,
-  * vilket signaleras via interrupt-flaggan ADIF (ADC Interrupt Flag), som då
-  * blir ettställd. För att sedan återställa ADIF inför nästa AD-omvandling
-  * så ettställs denna innan återhoppet.
+  * Funktionen init_ADC anvÃ¤nds fÃ¶r att initiera AD-omvandlaren. FÃ¶rst sÃ¤tts
+  * AD-omvandlaren till att matas med intern matningsspÃ¤nning. DÃ¤refter aktiveras
+  * AD-omvandlaren och startas med lÃ¤gsta mÃ¶jliga frekvens (125 kHz) fÃ¶r hÃ¶gsta
+  * mÃ¶jliga precision. DÃ¤refter vÃ¤ntar vi till att AD-omvandlingen Ã¤r slutfÃ¶rd,
+  * vilket signaleras via interrupt-flaggan ADIF (ADC Interrupt Flag), som dÃ¥
+  * blir ettstÃ¤lld. FÃ¶r att sedan Ã¥terstÃ¤lla ADIF infÃ¶r nÃ¤sta AD-omvandling
+  * sÃ¥ ettstÃ¤lls denna innan Ã¥terhoppet.
   *******************************************************************************/
  static void init_ADC(void) 
  {
@@ -76,15 +72,15 @@ void print_temperature(const struct TempSensor* self)
  }
  
   /******************************************************************************
-* Funktionen ADC_read används för att läsa av temperatursensorn och returnera 
-* resultatet. Först väljs analog kanal för avläsning, samtidigt som 
-* AD-omvandlaren sätts till att matas med intern matningsspänning. 
-* Därefter aktiveras AD-omvandlaren och startas med lägsta möjliga 
-* frekvens (125 kHz) för högsta möjliga precision. Därefter inväntar programmet
-* till att AD-omvandlingen är slutförd, vilket signaleras via AD-omvandlarens 
-* interrupt-flagga ADIF (ADC Interrupt Flag), som då blir ettställd. 
-* För att sedan återställa ADIF inför nästa AD-omvandlaren så ettställs denna, 
-* följt av att avläst resultat returneras vid återhoppet.
+* Funktionen ADC_read anvÃ¤nds fÃ¶r att lÃ¤sa av temperatursensorn och returnera 
+* resultatet. FÃ¶rst vÃ¤ljs analog kanal fÃ¶r avlÃ¤sning, samtidigt som 
+* AD-omvandlaren sÃ¤tts till att matas med intern matningsspÃ¤nning. 
+* DÃ¤refter aktiveras AD-omvandlaren och startas med lÃ¤gsta mÃ¶jliga 
+* frekvens (125 kHz) fÃ¶r hÃ¶gsta mÃ¶jliga precision. DÃ¤refter invÃ¤ntar programmet
+* till att AD-omvandlingen Ã¤r slutfÃ¶rd, vilket signaleras via AD-omvandlarens 
+* interrupt-flagga ADIF (ADC Interrupt Flag), som dÃ¥ blir ettstÃ¤lld. 
+* FÃ¶r att sedan Ã¥terstÃ¤lla ADIF infÃ¶r nÃ¤sta AD-omvandlaren sÃ¥ ettstÃ¤lls denna, 
+* fÃ¶ljt av att avlÃ¤st resultat returneras vid Ã¥terhoppet.
  ******************************************************************************/
 static uint16_t ADC_read(const uint8_t PIN)
 {
