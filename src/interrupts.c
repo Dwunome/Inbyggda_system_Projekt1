@@ -2,16 +2,17 @@
 #include "header.h"
 
 /******************************************************************************
-* Avbrottsrutin för PCI-avbrott för I/O-port B. Vid aktivering av denna
-* avbrottsrutin inaktiveras PCI-avbrott på tryckknappens PIN 13, vilket i
-* detta fall är enda källan till PCI-avbrott på I/O-porten i fråga. Detta görs
-* för att förhindra påverkan av kontaktstudsar, som annars kan medför att 
-* multipla avbrott äger rum kort efter varandra när knappen studsar. Timer 0
-* aktiveras för att efter 300 ms återaktivera PCI-avbrott på PIN 13. Ifall
-* nedtryckning av tryckknappen orsakade aktuellt avbrott, så mäts aktuell
-* rumstemperatur och skrivs ut i en seriell terminal. För att indikera att
-* temperaturavläsning genomförs så togglas led1. Samtidigt nollställs Timer 1.
+* Avbrottsrutin fÃ¶r PCI-avbrott fÃ¶r I/O-port B. Vid aktivering av denna
+* avbrottsrutin inaktiveras PCI-avbrott pÃ¥ tryckknappens PIN 13, vilket i
+* detta fall Ã¤r enda kÃ¤llan till PCI-avbrott pÃ¥ I/O-porten i frÃ¥ga. Detta gÃ¶rs
+* fÃ¶r att fÃ¶rhindra pÃ¥verkan av kontaktstudsar, som annars kan medfÃ¶r att 
+* multipla avbrott Ã¤ger rum kort efter varandra nÃ¤r knappen studsar. Timer 0
+* aktiveras fÃ¶r att efter 300 ms Ã¥teraktivera PCI-avbrott pÃ¥ PIN 13. Ifall
+* nedtryckning av tryckknappen orsakade aktuellt avbrott, sÃ¥ mÃ¤ts aktuell
+* rumstemperatur och skrivs ut i en seriell terminal. FÃ¶r att indikera att
+* temperaturavlÃ¤sning genomfÃ¶rs sÃ¥ togglas led1. Samtidigt nollstÃ¤lls Timer 1.
 ******************************************************************************/
+
 ISR (PCINT0_vect)
 {
 	Button_disable_interrupt(&button); 
@@ -28,13 +29,14 @@ ISR (PCINT0_vect)
 }
 
 /******************************************************************************
-* Avbrottsrutin för Timer 0 i Normal Mode, vilket sker var 0.016:e millisekund
-* då timern i fråga är aktiverad. Denna avbrottsrutin används för att generera 
-* en bouncetid på 300 ms, där PCI-avbrott på PIN 13 hålls inaktiverat efter ett 
-* givet avbrott för att förhindra att multipla äger rum på grund av 
-* kontakstudsar. När tillräckligt många avbrott har ägt rum så att timern har 
-* löpt ut, så inaktiveras Timer 0 och PCI-avbrott på PIN 13 återaktiveras.
+* Avbrottsrutin fÃ¶r Timer 0 i Normal Mode, vilket sker var 0.016:e millisekund
+* dÃ¥ timern i frÃ¥ga Ã¤r aktiverad. Denna avbrottsrutin anvÃ¤nds fÃ¶r att generera 
+* en bouncetid pÃ¥ 300 ms, dÃ¤r PCI-avbrott pÃ¥ PIN 13 hÃ¥lls inaktiverat efter ett 
+* givet avbrott fÃ¶r att fÃ¶rhindra att multipla Ã¤ger rum pÃ¥ grund av 
+* kontakstudsar. NÃ¤r tillrÃ¤ckligt mÃ¥nga avbrott har Ã¤gt rum sÃ¥ att timern har 
+* lÃ¶pt ut, sÃ¥ inaktiveras Timer 0 och PCI-avbrott pÃ¥ PIN 13 Ã¥teraktiveras.
 ******************************************************************************/
+
 ISR (TIMER0_OVF_vect)
 {
 	Timer_count(&timer0);
@@ -49,14 +51,15 @@ ISR (TIMER0_OVF_vect)
 }
 
 /******************************************************************************
-* Avbrottsrutin för Timer 1 i CTC Mode, vilket sker var 0.016:e millisekund då
-* timern i fråga är aktiverad. Denna avbrottsrutin används för att mäta
+* Avbrottsrutin fÃ¶r Timer 1 i CTC Mode, vilket sker var 0.016:e millisekund dÃ¥
+* timern i frÃ¥ga Ã¤r aktiverad. Denna avbrottsrutin anvÃ¤nds fÃ¶r att mÃ¤ta
 * rumstemperaturen var 60:e sekund, alternativt 60 sekunder efter senaste
-* knapptryckning. Varje gång denna rutin aktiveras så räknas antalet exekverade 
-* avbrott upp. När tillräckligt många avbrott har ägt rum så att timern har löpt 
-* ut, så mäts rumstemperaturen och skrivs ut i terminalen. För att indikera att 
-* temperaturmätning genomförs så togglas lysdioden. 
+* knapptryckning. Varje gÃ¥ng denna rutin aktiveras sÃ¥ rÃ¤knas antalet exekverade 
+* avbrott upp. NÃ¤r tillrÃ¤ckligt mÃ¥nga avbrott har Ã¤gt rum sÃ¥ att timern har lÃ¶pt 
+* ut, sÃ¥ mÃ¤ts rumstemperaturen och skrivs ut i terminalen. FÃ¶r att indikera att 
+* temperaturmÃ¤tning genomfÃ¶rs sÃ¥ togglas lysdioden. 
 ******************************************************************************/
+
 ISR (TIMER1_COMPA_vect)
 {
 	DynamicTimer_count(&timer1);	
