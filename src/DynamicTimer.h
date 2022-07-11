@@ -9,7 +9,7 @@
 #define MAX_CAPACITY 10 			// Max antal element som kan lagras i dynamisk array.
 
 /************************************************************************
-* Strukten DnamicTimer används för att implementera en dynamsisk timer
+* Strukten DynamicTimer används för att implementera en dynamsisk timer
 * där antalet timergenerade avbrott räknas och implementeras för att 
 * skapa en genomsnittlig tid på timern.
 ************************************************************************/
