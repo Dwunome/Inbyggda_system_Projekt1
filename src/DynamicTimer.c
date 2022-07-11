@@ -2,12 +2,12 @@
 
 static inline size_t check_capacity(const size_t capacity);
 
-/*
+/************************************************************************
 * Funktionen används för att implementera en ny dynamisk timer.
 * Ingående argument timerSelection utgörs av vald timerkrets och
 * capacity utgör maxstorleken på arrayen som lagrar antalet exekverade 
 * avbrott mellan varje knapptryckning.
-*/
+************************************************************************/
 struct DynamicTimer new_DynamicTimer(const TimerSelection timerSelection, const size_t capacity)
 {
 	struct DynamicTimer self;				// Skapar objektet self av strukten DynamicTimer.
@@ -21,7 +21,7 @@ struct DynamicTimer new_DynamicTimer(const TimerSelection timerSelection, const 
 }
 
 /************************************************************************
-* check_capacity används för att kontrollera angiven kapacitet
+* DynamicTimer_check_capacity används för att kontrollera angiven kapacitet
 * gällande antalet element som ska lagras av en dynamisk timer, 
 * så att denna kapacitet ej överstiger maximalt tillåtna storlek.
 * Det ingående argumentet capacity utgörs av angiven kapacitet. 
